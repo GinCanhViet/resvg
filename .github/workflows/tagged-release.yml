@@ -60,9 +60,9 @@ jobs:
         run: |
           tar czf resvg-linux-aarch64-musl.tar.gz resvg
           tar czf usvg-linux-aarch64-musl.tar.gz usvg
-          mkdir ../../bin
-          cp resvg-linux-aarch64-musl.tar.gz ../../bin/
-          cp usvg-linux-aarch64-musl.tar.gz ../../bin/
+          mkdir -p ../../../bin
+          cp resvg-linux-aarch64-musl.tar.gz ../../../bin/
+          cp usvg-linux-aarch64-musl.tar.gz ../../../bin/
 
       - name: Get version
         id: get_version
@@ -83,7 +83,7 @@ jobs:
               --exclude="resvg-$VERSION/version-bump.md" \
               --exclude="resvg-$VERSION/docs" \
               -cJf resvg-"$VERSION".tar.xz resvg-"$VERSION"
-            mkdir -p bin
+          mkdir -p bin
           cp resvg-"$VERSION".tar.xz bin/
 
       - name: Upload binaries
