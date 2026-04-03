@@ -8,8 +8,6 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER: aarch64-linux-gnu-gcc
-  CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: -Clink-self-contained=yes
 
 jobs:
   create-release:
@@ -43,22 +41,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Linux cross toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
-
-      - name: Install latest stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: aarch64-unknown-linux-musl
-
       - name: Build resvg
-        run: cargo build --release --target aarch64-unknown-linux-musl
+        uses: houseabsolute/actions-rust-cross@v1
+        with:
+          command: build
+          target: aarch64-unknown-linux-musl
+          args: --release -p resvg
 
       - name: Build usvg
-        working-directory: crates/usvg
-        run: cargo build --release --target aarch64-unknown-linux-musl
+        uses: houseabsolute/actions-rust-cross@v1
+        with:
+          command: build
+          target: aarch64-unknown-linux-musl
+          args: --release -p usvg
 
       - name: Collect
         working-directory: target/aarch64-unknown-linux-musl/release
